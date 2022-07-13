@@ -9,3 +9,8 @@ React only re-renders this component (and all of its potential descendant compon
 useState function is called a React hook.
 
 If we want to share state among components horizonally, we can put the state to parent components, called lifting state
+
+React props are just JS object, so we can apply a couple JS tricks to it. Like destructuring the props object
+
+Even though both have the same syntax (three dots), the rest operator shouldn’t be mistaken with
+the spread operator
