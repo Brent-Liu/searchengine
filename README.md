@@ -7,3 +7,5 @@ react synthetic even prevent the native browser behavior
 React only re-renders this component (and all of its potential descendant components) after its state has changed
 
 useState function is called a React hook.
+
+If we want to share state among components horizonally, we can put the state to parent components, called lifting state
