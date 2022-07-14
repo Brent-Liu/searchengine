@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-const useStorageState = (key, initialState) => {
+const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
   )
@@ -32,24 +32,22 @@ const App = () => {
     },
   ]
 
-  const [searchTerm, setSearchTerm] = useStorageState('search', 'React')
-
-  React.useEffect(() => {
-    localStorage.setItem('search', searchTerm)
-  }, [searchTerm])
+  const [searchTerm, setSearchTerm] = useSemiPersistentState(
+    'search',
+    'React'
+  )
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value)
-
   }
 
   const searchedStories = stories.filter((story) =>
-    story.title.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    story.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
     <div>
-      <h1> My Hacker Stories </h1>
+      <h1>My Hacker Stories</h1>
 
       <InputWithLabel
         id="search"
@@ -63,57 +61,58 @@ const App = () => {
       <hr />
 
       <List list={searchedStories} />
-
     </div>
   )
 }
 
-const InputWithLabel = ({ id, value, type = 'text', onInputChange, isFocused, children, }) => {
-  //A
+const InputWithLabel = ({
+  id,
+  value,
+  type = 'text',
+  onInputChange,
+  isFocused,
+  children,
+}) => {
   const inputRef = React.useRef()
 
-  //C
   React.useEffect(() => {
     if (isFocused && inputRef.current) {
-      //D
       inputRef.current.focus()
     }
   }, [isFocused])
 
   return (
     <>
-      <label htmlFor={id}> {children} </label>
+      <label htmlFor={id}>{children}</label>
       &nbsp;
-      {/* B */}
       <input
-        ref={inputRef}
         id={id}
+        ref={inputRef}
         type={type}
         value={value}
-        autoFocus={isFocused}
-        onChange={onInputChange} />
+        onChange={onInputChange}
+      />
     </>
   )
 }
 
 const List = ({ list }) => (
   <ul>
-    {list.map(({ objectID, ...item }) => (
-      <Item key={objectID} {...item} />
+    {list.map((item) => (
+      <Item key={item.objectID} item={item} />
     ))}
   </ul>
 )
 
-const Item = ({ title, url, author, num_comments, points }) => (
+const Item = ({ item }) => (
   <li>
     <span>
-      <a href={url}>{title}</a>
+      <a href={item.url}>{item.title}</a>
     </span>
-    <span>{author}</span>
-    <span>{num_comments}</span>
-    <span>{points}</span>
+    <span>{item.author}</span>
+    <span>{item.num_comments}</span>
+    <span>{item.points}</span>
   </li>
 )
-
 
 export default App
